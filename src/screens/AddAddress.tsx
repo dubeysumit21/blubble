@@ -102,7 +102,7 @@ const AddAddress: React.FC = (props: any) => {
             <Feather name="search" size={22} color="#CCCCCC" />
           )}
           query={{
-            key: "AIzaSyDAICYEp9oallDawd-lAHqaMD3nVMRzv40",
+            key: "",
             language: "en",
           }}
           fetchDetails={true}

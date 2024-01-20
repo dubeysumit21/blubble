@@ -14,6 +14,17 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.sumitdubey.blubbleapp",
