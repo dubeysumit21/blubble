@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "ES5",
+    "module": "CommonJS",
+    "sourceMap": true,
+    "strictNullChecks": true
+  },
+  "extends": "expo/tsconfig.base"
+}

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "847393913982",
+    "project_id": "blubble-ef1cc",
+    "storage_bucket": "blubble-ef1cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847393913982:android:d437a9a9b505ac7db02c2f",
+        "android_client_info": {
+          "package_name": "com.sumitdubey.blubbleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847393913982-tli3jiphri0uqpktboma2ojr6mo8h76l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfPtZs7jrr8aMrcXVe4y9Tiz0Q-QtoQKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847393913982-tli3jiphri0uqpktboma2ojr6mo8h76l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "847393913982-k37hajrp2ub06315vm1e8bsk92f93to5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sumitdubey.blubbleapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>847393913982-k37hajrp2ub06315vm1e8bsk92f93to5.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.847393913982-k37hajrp2ub06315vm1e8bsk92f93to5</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAelhtqZ8UQ8e5ilwA-dK5Idn4GqfDaP4E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>847393913982</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sumitdubey.blubbleapp</string>
+	<key>PROJECT_ID</key>
+	<string>blubble-ef1cc</string>
+	<key>STORAGE_BUCKET</key>
+	<string>blubble-ef1cc.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:847393913982:ios:27dcde6e9cfac580b02c2f</string>
+</dict>
+</plist>
