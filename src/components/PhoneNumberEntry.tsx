@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -20,15 +21,19 @@ import OTPTextInput from "react-native-otp-textinput";
 import Toast from "react-native-toast-message";
 import { invalidNumber, otpReSent, otpSent } from "../utils/utils";
 import { Routes } from "../utils/Routes";
+import auth from "@react-native-firebase/auth";
 
 interface Props {
   hideBack: () => void;
   showBack: () => void;
   navigation: any;
+  setLoader: (value: boolean) => void;
 }
 
 const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
-  const { hideBack, showBack, navigation } = props;
+  const { hideBack, showBack, navigation, setLoader } = props;
+  const [confirm, setConfirm] = useState<any>(null);
+  const [code, setCode] = useState("");
   const [otpFlag, setOtpFlag] = useState<boolean>(false);
   const [otpVerified, setOtpVerified] = useState<boolean>(false);
   const [wrongOtp, setWrongOtp] = useState<boolean>(false);
@@ -41,6 +46,8 @@ const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
   const [value, setValue] = useState<string>("");
   useEffect(() => {
     animationRef.current?.play(30, 120);
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
   }, []);
   const openOTPSection = () => {
     setOtpFlag(true);
@@ -58,25 +65,6 @@ const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
       friction: 8,
       useNativeDriver: false,
     }).start();
-  };
-  const verifyOTP = (otp: string) => {
-    const correct = true;
-    if (correct) {
-      setOtpVerified(true);
-      navigation.navigate(Routes.ADD_ADDRESS);
-      resetPhoneNumber();
-    } else {
-      setOtpVerified(false);
-      setWrongOtp(true);
-      Toast.show({
-        type: "error",
-        text1: "Oops!",
-        text2: "Incorrect OTP entered!",
-        position: "top",
-        topOffset: 60,
-      });
-    }
-    // setWrongOtp(true);
   };
 
   const resetPhoneNumber = () => {
@@ -99,8 +87,60 @@ const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
   };
 
   const reSendOtp = () => {
+    setConfirm(null);
     otpReSent();
     otpRef?.current?.clear();
+    signInWithPhoneNumber();
+  };
+
+  const onAuthStateChanged = (user: any) => {
+    if (user) {
+      console.info("User", user);
+    }
+  };
+
+  const signInWithPhoneNumber = async () => {
+    const callingCode = phoneInput?.current?.getCallingCode();
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(
+        `+${callingCode}${value}`,
+      );
+      setConfirm(confirmation);
+      otpSent();
+      setLoader(false);
+      openOTPSection();
+    } catch (error: any) {
+      setLoader(false);
+      Toast.show({
+        type: "error",
+        text1: "Oops!",
+        text2: "Something went wrong, please try again!",
+        position: "top",
+        topOffset: 60,
+      });
+    }
+  };
+
+  const confirmCode = async (text: string): Promise<any> => {
+    try {
+      setLoader(true);
+      await confirm.confirm(text);
+      setLoader(false);
+      setOtpVerified(true);
+      navigation.navigate(Routes.ADD_ADDRESS);
+      resetPhoneNumber();
+    } catch (error) {
+      setLoader(false);
+      setOtpVerified(false);
+      setWrongOtp(true);
+      Toast.show({
+        type: "error",
+        text1: "Oops!",
+        text2: "Incorrect OTP entered!",
+        position: "top",
+        topOffset: 60,
+      });
+    }
   };
 
   return (
@@ -111,23 +151,66 @@ const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
       }}
     >
       <View style={styles.phoneInputWrapper}>
+        <Text
+          style={{
+            color: "#FFFFFF",
+            fontFamily: "Quicksand-Bold",
+            fontSize: 52,
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          Blubble
+        </Text>
         <LottieView
           ref={animationRef}
-          source={require("../assets/mobile.json")}
+          source={require("../assets/login_lottie.json")}
           loop={true}
-          style={styles.phoneLottie}
+          style={styles.lottieLogin}
         />
-        <Text style={styles.enterMobileNumber}>
+        <View
+          style={{
+            width: "100%",
+            height: 40,
+            justifyContent: "space-around",
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <View
+            style={{
+              width: "22%",
+              borderWidth: 0.5,
+              height: 1,
+              borderColor: "#FFFFFF",
+            }}
+          />
+          <Text
+            style={{
+              fontFamily: "Quicksand-SemiBold",
+              color: "#FFFFFF",
+              fontSize: 20,
+            }}
+          >
+            Log in or Sign up
+          </Text>
+          <View
+            style={{
+              width: "22%",
+              borderWidth: 0.5,
+              height: 1,
+              borderColor: "#FFFFFF",
+            }}
+          />
+        </View>
+        {/* <Text style={styles.enterMobileNumber}>
           Enter your mobile number to continue.
-        </Text>
-        <Text style={styles.confirmText}>
-          Please confirm your country code and enter your phone number.
-        </Text>
+        </Text> */}
         <View style={styles.phoneNumberWrapper}>
           <Animated.View
             style={{
               width: "100%",
-              height: 80,
+              height: 79,
               justifyContent: "center",
               alignItems: "center",
               transform: [{ translateY: pBounceValue }],
@@ -177,6 +260,7 @@ const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
             }}
           >
             <OTPTextInput
+              inputCount={6}
               ref={otpRef}
               tintColor={
                 wrongOtp ? "#FF3333" : otpVerified ? "#4BB543" : "#FFFFFF"
@@ -195,8 +279,8 @@ const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
                 fontSize: 24,
               }}
               handleTextChange={(text: string) => {
-                if (text?.length === 4) {
-                  verifyOTP(text);
+                if (text?.length === 6) {
+                  confirmCode(text);
                 } else {
                   setWrongOtp(false);
                   setOtpVerified(false);
@@ -230,9 +314,9 @@ const PhoneNumberEntry: React.FC<Props> = (props: Props) => {
             onPress={() => {
               const valid = phoneInput.current?.isValidNumber(value);
               if (valid && !otpFlag) {
-                otpSent();
+                setLoader(true);
                 setPhoneNumberError(false);
-                openOTPSection();
+                signInWithPhoneNumber();
               } else if (otpFlag) {
                 otpReSent();
               } else {

@@ -11,10 +11,7 @@ import {
   Image,
   Dimensions,
   Platform,
-  Text,
   KeyboardAvoidingView,
-  Animated,
-  TouchableOpacity,
 } from "react-native";
 
 import { styles } from "./styles";
@@ -24,25 +21,17 @@ import jwt_decode from "jwt-decode";
 import { blubleEnums } from "../utils/enums";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/actions/user";
-import SignInSection from "../components/SignInSection";
 import PhoneNumberEntry from "../components/PhoneNumberEntry";
-import BackButton from "../components/BackButton";
+import CustomLoader from "../components/CustomLoader";
+import ProvacyPolicySection from "../components/PrivacyPolicySection";
 
 const { width, height } = Dimensions.get("screen");
 GoogleSignin.configure();
 
 const Login: React.FC = (props: any) => {
   const { navigation } = props;
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [backVisible, setBackVisible] = useState<boolean>(false);
+  const [loader, setLoader] = useState<boolean>(false);
   const [hideBack, setHideBack] = useState<boolean>(false);
-  const [sBounceValue, setSBounceValue] = useState<any>(
-    new Animated.Value(width / 2),
-  );
-  const [pBounceValue, setPBounceValue] = useState<any>(
-    new Animated.Value(width),
-  );
   const dispatch = useDispatch();
   const animationRef = useRef<any>(null);
   useEffect(() => {
@@ -53,7 +42,6 @@ const Login: React.FC = (props: any) => {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
       const user: any = jwt_decode(userInfo?.idToken);
-      console.info("==?", user);
       const loggedInUser = {
         service: blubleEnums.GOOGLE,
         userId: user?.sub,
@@ -69,40 +57,6 @@ const Login: React.FC = (props: any) => {
       console.info("Error", error);
     }
   };
-  const goToOTPScreen = () => {
-    setBackVisible(true);
-    Animated.spring(sBounceValue, {
-      toValue: -width,
-      velocity: 3,
-      tension: 2,
-      friction: 8,
-      useNativeDriver: false,
-    }).start();
-    Animated.spring(pBounceValue, {
-      toValue: -width / 2,
-      velocity: 3,
-      tension: 2,
-      friction: 8,
-      useNativeDriver: false,
-    }).start();
-  };
-  const goToSignInScreen = () => {
-    setBackVisible(false);
-    Animated.spring(sBounceValue, {
-      toValue: width / 2,
-      velocity: 3,
-      tension: 2,
-      friction: 8,
-      useNativeDriver: false,
-    }).start();
-    Animated.spring(pBounceValue, {
-      toValue: width,
-      velocity: 3,
-      tension: 2,
-      friction: 8,
-      useNativeDriver: false,
-    }).start();
-  };
   return (
     <View style={styles.container}>
       <Image
@@ -110,41 +64,12 @@ const Login: React.FC = (props: any) => {
         style={{ width, height }}
         resizeMode="cover"
       />
-      {backVisible && !hideBack && (
-        <BackButton
-          onPress={() => {
-            goToSignInScreen();
-          }}
-          color="#FFFFFF"
-        />
-      )}
+      {loader ? <CustomLoader /> : null}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.animationContainer}
       >
-        <Animated.View
-          style={{
-            ...styles.animatingView,
-            transform: [{ translateX: sBounceValue }],
-          }}
-        >
-          <SignInSection
-            username={username}
-            password={password}
-            setUsername={(text: string) => {
-              setUsername(text);
-            }}
-            setPassword={(text: string) => {
-              setPassword(text);
-            }}
-          />
-        </Animated.View>
-        <Animated.View
-          style={{
-            ...styles.animatingView,
-            transform: [{ translateX: pBounceValue }],
-          }}
-        >
+        <View style={styles.animatingView}>
           <PhoneNumberEntry
             hideBack={() => {
               setHideBack(true);
@@ -153,18 +78,18 @@ const Login: React.FC = (props: any) => {
               setHideBack(false);
             }}
             navigation={navigation}
-          />
-        </Animated.View>
-        {!backVisible && <Text style={styles.orText}>Or</Text>}
-        {!backVisible && (
-          <SocialMediaLogins
-            onGooglePressed={() => {
-              // signIn();
-              goToOTPScreen();
+            setLoader={(value: boolean) => {
+              setLoader(value);
             }}
           />
-        )}
+        </View>
+        <SocialMediaLogins
+          onGooglePressed={() => {
+            signIn();
+          }}
+        />
       </KeyboardAvoidingView>
+      <ProvacyPolicySection />
     </View>
   );
 };

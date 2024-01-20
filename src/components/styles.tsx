@@ -28,16 +28,16 @@ export const styles = StyleSheet.create({
   sMWrapper: {
     width: "80%",
     position: "absolute",
-    bottom: 50,
+    bottom: 100,
   },
   sMBody: {
-    width: "50%",
+    width: "80%",
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 8,
     padding: 5,
-    alignSelf: "flex-end",
+    alignSelf: "center",
   },
   googleImage: { width: 50, height: 50 },
   facebookImage: { width: 40, height: 40 },
@@ -99,6 +99,7 @@ export const styles = StyleSheet.create({
     height: 180,
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
   },
   signInBox: {
     width: "85%",
@@ -135,11 +136,11 @@ export const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     justifyContent: "space-between",
-    height: height - 380,
+    height: height - 400,
   },
   phoneLottie: {
-    width: 180,
-    height: 180,
+    width: 170,
+    height: 170,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 40,
@@ -154,7 +155,7 @@ export const styles = StyleSheet.create({
   enterMobileNumber: {
     color: "#FFFFFF",
     fontFamily: "Quicksand-SemiBold",
-    fontSize: 30,
+    fontSize: 22,
   },
   confirmText: {
     color: "#FFC000",
@@ -325,4 +326,33 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   addressTypeSaveText: { color: "#FFFFFF", fontFamily: "Quicksand-SemiBold" },
+  privacyPolicySection: {
+    width: "100%",
+    position: "absolute",
+    bottom: 45,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  continuePolicyText: {
+    color: "#FFFFFF",
+    fontFamily: "Quicksand-Medium",
+    fontSize: 15,
+  },
+  clickableButton: {
+    width: "40%",
+    alignSelf: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 7,
+  },
+  privacyPolicy: {
+    color: "#FFFFFF",
+    fontFamily: "Quicksand-Medium",
+    fontSize: 12,
+  },
+  terms: {
+    color: "#FFFFFF",
+    fontFamily: "Quicksand-Medium",
+    fontSize: 12,
+  },
 });
