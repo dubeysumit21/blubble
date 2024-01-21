@@ -10,10 +10,15 @@ interface UserInfoState {
   iss: string;
   pictureUrl: string;
   phoneNumber: string;
-  address: {
+  addressTypesAvailable: string[];
+  address: Array<{
     coordinates: any;
-    type: string[];
-  };
+    name: string;
+    contact: string;
+    flat: string;
+    locality: string;
+    landmark: string;
+  }>;
 }
 
 const initialState: UserInfoState = {
@@ -25,10 +30,15 @@ const initialState: UserInfoState = {
   iss: "",
   pictureUrl: "",
   phoneNumber: "",
-  address: {
-    coordinates: {},
-    type: ["Home"],
-  },
+  addressTypesAvailable: ["Home"],
+  address: [{
+    coordinates: null,
+    name: "",
+    contact: "",
+    flat: "",
+    locality: "",
+    landmark: "",
+  }],
 };
 
 
@@ -48,5 +58,8 @@ export const userInfoReducer: any = createReducer(initialState, {
     },
     setUserAddress: (state, action) => {
         state.address = action.payload;
+    },
+    setAvailableUserType: (state, action) => {
+      state.addressTypesAvailable = action.payload;
     },
   });

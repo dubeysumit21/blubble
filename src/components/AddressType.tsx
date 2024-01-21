@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, Text, TextInput, View } from "react-native";
 import { styles } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserAddress } from "../redux/actions/user";
+import { setAvailableUserType } from "../redux/actions/user";
 import { AntDesign } from "@expo/vector-icons";
 
 interface Props {
@@ -41,11 +41,8 @@ const AddressType: React.FC<Props> = (props: Props) => {
         }}
         disabled={addressType.length < 3}
         onPress={() => {
-          const userAddressType = {
-            ...user?.address,
-            type: [...user?.address?.type, addressType],
-          };
-          dispath(setUserAddress(userAddressType));
+          const temp = [...user?.addressTypesAvailable, addressType];
+          dispath(setAvailableUserType(temp));
           setTextEntry(false);
         }}
       >

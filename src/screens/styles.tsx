@@ -67,13 +67,51 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 20,
   },
-  addAddressHeader: {
+  addressSaveButton: {
     width: "100%",
-    justifyContent: "flex-start",
+    alignSelf: "center",
+    backgroundColor: "#FFC000",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 10,
+    marginVertical: 20,
   },
-  enterText: {
+  searchBox: {
+    backgroundColor: "#FFFFFF",
+    width: "90%",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    marginVertical: 10,
+    position: "absolute",
+    top: "16%",
+    zIndex: 200,
+  },
+  inputContainer: {
+    width: "95%",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textInput: {
+    height: 45,
+    color: "#5d5d5d",
+    fontSize: 18,
+    fontFamily: "Quicksand-Regular",
+  },
+  descriptionText: {
+    color: "#1faadb",
+  },
+  listView: {
+    height: 200,
+  },
+  saveText: {
+    color: "#FFFFFF",
     fontFamily: "Quicksand-SemiBold",
-    color: "#232023",
-    fontSize: 22,
+    fontSize: 24,
   },
 });

@@ -1,34 +1,32 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/prefer-ts-expect-error */
 import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   SafeAreaView,
-  TextInput,
   View,
   TouchableOpacity,
   Text,
-  Keyboard,
-  TouchableWithoutFeedback,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import BackButton from "../components/BackButton";
 import { Entypo, Feather } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserAddress } from "../redux/actions/user";
 import AddAddressHeader from "../components/AddAddressHeader";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { styles } from "./styles";
-import Modal from "react-native-modalbox";
-import AddressType from "../components/AddressType";
-import AddressTypePanel from "../components/AddressTypePanel";
-import AddressEntryBox from "../components/AddressEntryBox";
+import AddressModal from "../components/AddressModal";
 
-const { height, width } = Dimensions.get("screen");
+const { height } = Dimensions.get("screen");
 
 const AddAddress: React.FC = (props: any) => {
-  const { navigation } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const [contact, setContact] = useState<string>("");
+  const [flat, setFlat] = useState<string>("");
+  const [locality, setLocality] = useState<string>("");
+  const [landmark, setLandmark] = useState<string>("");
   const [selectedLocation, setSelectedlocation] = useState<any>();
   const [markerLocation, setMarkerLocation] = useState<any>({
     latitude: 37.78825,
@@ -37,14 +35,6 @@ const AddAddress: React.FC = (props: any) => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
   const mapRef: any = useRef<any>(null);
-  const show = useRef<null>();
-  const addressFields = [
-    { type: "name", label: "Name" },
-    { type: "contact_number", label: "Contact Number" },
-    { type: "flat", label: "Flat / House No / Floor / Building" },
-    { type: "locality", label: "Area / Sector / Locality" },
-    { type: "landmark", label: "Nearby Landmark" },
-  ];
   useEffect(() => {
     setTimeout(() => {
       mapRef?.current?.animateCamera(
@@ -58,26 +48,20 @@ const AddAddress: React.FC = (props: any) => {
       );
     }, 2000);
   }, []);
+  const saveAddress = () => {
+    const payload = {
+      name,
+      contact,
+      flat,
+      locality,
+      landmark,
+    };
+    console.info("====>", payload);
+  };
   return (
     <SafeAreaView>
-      <BackButton onPress={() => navigation.goBack()} color="#000000" />
       <AddAddressHeader />
-      <View
-        style={{
-          backgroundColor: "#FFFFFF",
-          width: "90%",
-          borderRadius: 8,
-          justifyContent: "center",
-          alignItems: "center",
-          alignSelf: "center",
-          flexDirection: "row",
-          paddingHorizontal: 10,
-          marginVertical: 10,
-          position: "absolute",
-          top: "16%",
-          zIndex: 200,
-        }}
-      >
+      <View style={styles.searchBox}>
         <GooglePlacesAutocomplete
           placeholder="Search"
           minLength={2}
@@ -107,27 +91,39 @@ const AddAddress: React.FC = (props: any) => {
           }}
           fetchDetails={true}
           styles={{
-            textInputContainer: {
-              width: "95%",
-              alignSelf: "center",
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            textInput: {
-              height: 45,
-              color: "#5d5d5d",
-              fontSize: 18,
-              fontFamily: "Quicksand-Regular",
-            },
-            predefinedPlacesDescription: {
-              color: "#1faadb",
-            },
-            listView: {
-              height: 200,
-            },
+            textInputContainer: styles.inputContainer,
+            textInput: styles.textInput,
+            predefinedPlacesDescription: styles.descriptionText,
+            listView: styles.listView,
           }}
         />
       </View>
+      {isOpen ? (
+        <AddressModal
+          isOpen={isOpen}
+          setIsOpen={(value: boolean) => {
+            setIsOpen(value);
+          }}
+          setName={(value: string) => {
+            setName(value);
+          }}
+          setContact={(value: string) => {
+            setContact(value);
+          }}
+          setFlat={(value: string) => {
+            setFlat(value);
+          }}
+          setLocality={(value: string) => {
+            setLocality(value);
+          }}
+          setLandmark={(value: string) => {
+            setLandmark(value);
+          }}
+          saveAddress={() => {
+            saveAddress();
+          }}
+        />
+      ) : null}
       <MapView
         ref={mapRef}
         initialRegion={{
@@ -163,60 +159,8 @@ const AddAddress: React.FC = (props: any) => {
           setIsOpen(true);
         }}
       >
-        <Text
-          style={{
-            color: "#FFFFFF",
-            fontFamily: "Quicksand-SemiBold",
-            fontSize: 24,
-          }}
-        >
-          Enter complete address
-        </Text>
+        <Text style={styles.saveText}>Enter complete address</Text>
       </TouchableOpacity>
-      <Modal
-        style={{
-          width,
-          height: height - 80,
-          justifyContent: "center",
-          zIndex: 200,
-          position: "absolute",
-          bottom: 0,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          padding: 15,
-        }}
-        position="center"
-        backdrop={true}
-        ref={show}
-        isOpen={isOpen}
-        coverScreen={true}
-        onClosed={() => {
-          setIsOpen(false);
-        }}
-      >
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-          }}
-        >
-          <View style={{ flex: 1 }}>
-            <View style={styles.addAddressHeader}>
-              <Text style={styles.enterText}>Enter address details</Text>
-            </View>
-            <AddressTypePanel />
-            {addressFields.map((a: any) => {
-              return (
-                <AddressEntryBox
-                  key={a.type}
-                  onChangeText={() => null}
-                  type={a.type}
-                  label={a.label}
-                />
-              );
-            })}
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
     </SafeAreaView>
   );
 };

@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { View, Text, TextInput } from "react-native";
 import { styles } from "./styles";
 
@@ -8,8 +9,14 @@ interface Props {
   onChangeText: (text: string, type: string) => void;
 }
 
-const AddressEntryBox: React.FC<Props> = (props: Props) => {
+const AddressEntryBox: React.FC<Props> = (props: Props, ref: any) => {
   const { label, type, onChangeText } = props;
+  const inputRef: any = useRef();
+  useImperativeHandle(ref, () => ({
+    focusKeyboard: () => {
+      inputRef?.current?.focus();
+    },
+  }));
   return (
     <View style={{ width: "100%" }}>
       <Text style={styles.label}>{label}</Text>
@@ -20,10 +27,10 @@ const AddressEntryBox: React.FC<Props> = (props: Props) => {
         onChangeText={(text: string) => {
           onChangeText(text, type);
         }}
-        autoFocus
+        ref={inputRef}
       />
     </View>
   );
 };
 
-export default AddressEntryBox;
+export default forwardRef(AddressEntryBox);

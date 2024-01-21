@@ -27,3 +27,11 @@ export const setUserAddress = (qty: any) => (dispatch: Dispatch<MyAction>) => {
     payload: qty,
   });
 };
+
+export const setAvailableUserType =
+  (qty: any) => (dispatch: Dispatch<MyAction>) => {
+    dispatch({
+      type: "setAvailableUserType",
+      payload: qty,
+    });
+  };
