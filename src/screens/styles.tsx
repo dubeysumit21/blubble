@@ -114,4 +114,33 @@ export const styles = StyleSheet.create({
     fontFamily: "Quicksand-SemiBold",
     fontSize: 24,
   },
+  lottieWrapper: {
+    width: 300,
+    height: 300,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  onboardingScreen: {
+    backgroundColor: "#FFFFFF",
+    height,
+    width,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  lottieSearch: {
+    width: 450,
+    height: 350,
+    borderRadius: 200,
+  },
+  lottieGive: {
+    width: 300,
+    height: 300,
+    borderRadius: 200,
+  },
+  lottieWork: {
+    width: 450,
+    height: 400,
+    borderRadius: 200,
+  },
 });
