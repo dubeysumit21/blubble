@@ -4,6 +4,7 @@ import { Routes } from "../utils/Routes";
 import Login from "../screens/Login";
 import AddAddress from "../screens/AddAddress";
 import UserOnboarding from "../screens/UserOnboarding";
+import AddUserScreen from "../screens/AddUserScreen";
 
 const BaseNavigator: React.FC = () => {
   const Stack = createStackNavigator();
@@ -29,9 +30,19 @@ const BaseNavigator: React.FC = () => {
           headerLeft: () => null,
         }}
       /> */}
-      <Stack.Screen
+      {/* <Stack.Screen
         name={Routes.ONBOARDING}
         component={UserOnboarding}
+        options={{
+          headerShown: false,
+          title: "MainScreen",
+          gestureEnabled: false,
+          headerLeft: () => null,
+        }}
+      /> */}
+      <Stack.Screen
+        name={Routes.ADD_USER}
+        component={AddUserScreen}
         options={{
           headerShown: false,
           title: "MainScreen",

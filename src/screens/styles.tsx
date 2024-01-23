@@ -143,4 +143,40 @@ export const styles = StyleSheet.create({
     height: 400,
     borderRadius: 200,
   },
+  horizontalLine: {
+    width: "100%",
+    borderColor: "#97979750",
+    borderWidth: 0.5,
+    height: 1,
+    marginBottom: 20,
+  },
+  userProfileView: {
+    height: "55%",
+    paddingHorizontal: 25,
+  },
+  waveImage: {
+    width: "100%",
+    height: 300,
+    position: "absolute",
+    top: "30%",
+    transform: [{ scaleX: -1 }],
+  },
+  displayImage: { width: "100%", height: 300, opacity: 0.5 },
+  addUserScreen: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    justifyContent: "space-between",
+  },
+  genderSelection: {
+    width: "98%",
+    alignSelf: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  notChosen: {
+    color: "#979797",
+    fontSize: 15,
+    fontFamily: "Quicksand-Medium",
+    textAlign: "center",
+  },
 });
