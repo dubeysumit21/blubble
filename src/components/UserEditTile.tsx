@@ -5,12 +5,18 @@ import { styles } from "./styles";
 
 interface Props {
   title: string;
+  onPress: () => void;
 }
 
 const UserEditTile: React.FC<Props> = (props: Props) => {
-  const { title } = props;
+  const { title, onPress } = props;
   return (
-    <TouchableOpacity style={styles.userEditEmail}>
+    <TouchableOpacity
+      style={styles.userEditEmail}
+      onPress={() => {
+        onPress();
+      }}
+    >
       <Text style={styles.emailText}>{title}</Text>
       <Entypo name="chevron-right" size={20} color="black" />
     </TouchableOpacity>

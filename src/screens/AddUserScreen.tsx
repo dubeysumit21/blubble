@@ -8,10 +8,12 @@ import UserImageThumbnail from "../components/UserImageThumbnail";
 import { styles } from "./styles";
 import { Fontisto } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
+import UserEditInfo from "../components/UserEditInfo";
 
 const { width } = Dimensions.get("screen");
 
 const AddUserScreen: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   const [genderConfig, setGenderConfig] = useState<any>([
     { type: "M", render: <Fontisto name="male" size={54} color="#979797" /> },
     { type: "F", render: <Fontisto name="female" size={54} color="#979797" /> },
@@ -57,6 +59,7 @@ const AddUserScreen: React.FC = () => {
   };
   return (
     <SafeAreaView style={styles.addUserScreen}>
+      {isOpen ? <UserEditInfo isOpen={isOpen} setIsOpen={setIsOpen} /> : null}
       <View style={{ width, height: "38%" }}>
         <Image
           source={require("../assets/dummy_image.jpg")}
@@ -72,7 +75,12 @@ const AddUserScreen: React.FC = () => {
       <View style={styles.userProfileView}>
         <NameSection />
         <View style={styles.horizontalLine} />
-        <UserEditTile title="dubey.sumit94.sd@gmail.com" />
+        <UserEditTile
+          title="dubey.sumit94.sd@gmail.com"
+          onPress={() => {
+            setIsOpen(true);
+          }}
+        />
         <View style={styles.genderSelection}>
           {genderConfig.map((g: any) => (
             <GenderSelectionTile
@@ -86,7 +94,12 @@ const AddUserScreen: React.FC = () => {
             />
           ))}
         </View>
-        <UserEditTile title="21/02/1995" />
+        <UserEditTile
+          title="21/02/1995"
+          onPress={() => {
+            setIsOpen(true);
+          }}
+        />
         <CustomButton label="Submit" />
       </View>
     </SafeAreaView>
