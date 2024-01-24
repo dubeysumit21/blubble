@@ -9,11 +9,19 @@ import { styles } from "./styles";
 import { Fontisto } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
 import UserEditInfo from "../components/UserEditInfo";
+import { validateDOB, validateEmail } from "../utils/utils";
+import Toast from "react-native-toast-message";
+import moment from "moment";
 
 const { width } = Dimensions.get("screen");
 
 const AddUserScreen: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [name, setName] = useState<string>("Katherine Johnson");
+  const [email, setEmail] = useState<string>("Email");
+  const [dob, setDob] = useState<string>("DD-MM-YYYY");
+  const [errorType, setErrorType] = useState<string>("");
+  const [activeOption, setActiveOption] = useState<string>("");
   const [genderConfig, setGenderConfig] = useState<any>([
     { type: "M", render: <Fontisto name="male" size={54} color="#979797" /> },
     { type: "F", render: <Fontisto name="female" size={54} color="#979797" /> },
@@ -57,9 +65,62 @@ const AddUserScreen: React.FC = () => {
       });
     });
   };
+  const submitHandler = () => {
+    if (!validateEmail(email)) {
+      Toast.show({
+        type: "error",
+        text1: "Oops!",
+        text2: "The email you have entered is not valid.",
+        position: "top",
+        topOffset: 60,
+      });
+      setErrorType("email");
+      return;
+    }
+    if (!validateDOB(dob)) {
+      Toast.show({
+        type: "error",
+        text1: "Oops!",
+        text2: "Please enter your date of birth.",
+        position: "top",
+        topOffset: 60,
+      });
+      setErrorType("dob");
+      return;
+    }
+    if (!(genderConfig.find((g: any) => g.selected))) {
+      Toast.show({
+        type: "error",
+        text1: "Oops!",
+        text2: "Please select your gender.",
+        position: "top",
+        topOffset: 60,
+      });
+      setErrorType("gender");
+    }
+    const requestBody = {
+      first_name: name.split(" ")[0],
+      last_name: name.split(" ")[1],
+      email: email,
+      dob: moment(dob, 'DD-MM-YYYY').unix(),
+      gender: genderConfig.find((g: any) => g.selected)?.type,
+    };
+    console.info("requestBody", requestBody)
+  };
   return (
     <SafeAreaView style={styles.addUserScreen}>
-      {isOpen ? <UserEditInfo isOpen={isOpen} setIsOpen={setIsOpen} /> : null}
+      {isOpen ? (
+        <UserEditInfo
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          activeOption={activeOption}
+          email={email}
+          dob={dob}
+          setDob={setDob}
+          setEmail={setEmail}
+          setErrorType={setErrorType}
+        />
+      ) : null}
       <View style={{ width, height: "38%" }}>
         <Image
           source={require("../assets/dummy_image.jpg")}
@@ -73,13 +134,17 @@ const AddUserScreen: React.FC = () => {
         <UserImageThumbnail />
       </View>
       <View style={styles.userProfileView}>
-        <NameSection />
+        <NameSection name={name}/>
         <View style={styles.horizontalLine} />
         <UserEditTile
-          title="dubey.sumit94.sd@gmail.com"
+          type="email"
+          title={email}
           onPress={() => {
             setIsOpen(true);
+            setActiveOption("email");
           }}
+          activeOption={activeOption}
+          errorType={errorType}
         />
         <View style={styles.genderSelection}>
           {genderConfig.map((g: any) => (
@@ -95,12 +160,16 @@ const AddUserScreen: React.FC = () => {
           ))}
         </View>
         <UserEditTile
-          title="21/02/1995"
+          type="dob"
+          title={dob}
           onPress={() => {
             setIsOpen(true);
+            setActiveOption("dob");
           }}
+          activeOption={activeOption}
+          errorType={errorType}
         />
-        <CustomButton label="Submit" />
+        <CustomButton label="Submit" onPress={() => submitHandler()}/>
       </View>
     </SafeAreaView>
   );

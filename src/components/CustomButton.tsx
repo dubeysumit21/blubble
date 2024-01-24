@@ -4,12 +4,13 @@ import { styles } from "./styles";
 
 interface Props {
   label: string;
+  onPress: () => void;
 }
 
 const CustomButton: React.FC<Props> = (props: Props) => {
-  const { label } = props;
+  const { label, onPress } = props;
   return (
-    <TouchableOpacity style={styles.customButton}>
+    <TouchableOpacity style={styles.customButton} onPress={() => onPress()}>
       <Text style={styles.customButtonText}>{label}</Text>
     </TouchableOpacity>
   );
