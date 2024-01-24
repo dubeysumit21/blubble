@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState } from "react";
 import { View, Dimensions, Image, Text, SafeAreaView } from "react-native";
@@ -12,12 +14,15 @@ import UserEditInfo from "../components/UserEditInfo";
 import { validateDOB, validateEmail } from "../utils/utils";
 import Toast from "react-native-toast-message";
 import moment from "moment";
+import * as ImagePicker from "expo-image-picker";
+// import CustomLoader from "../components/CustomLoader";
 
 const { width } = Dimensions.get("screen");
 
 const AddUserScreen: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [name, setName] = useState<string>("Katherine Johnson");
+  const [image, setImage] = useState<any>(null);
   const [email, setEmail] = useState<string>("Email");
   const [dob, setDob] = useState<string>("DD-MM-YYYY");
   const [errorType, setErrorType] = useState<string>("");
@@ -88,7 +93,7 @@ const AddUserScreen: React.FC = () => {
       setErrorType("dob");
       return;
     }
-    if (!(genderConfig.find((g: any) => g.selected))) {
+    if (!genderConfig.find((g: any) => g.selected)) {
       Toast.show({
         type: "error",
         text1: "Oops!",
@@ -101,14 +106,27 @@ const AddUserScreen: React.FC = () => {
     const requestBody = {
       first_name: name.split(" ")[0],
       last_name: name.split(" ")[1],
-      email: email,
-      dob: moment(dob, 'DD-MM-YYYY').unix(),
+      email,
+      dob: moment(dob, "DD-MM-YYYY").unix(),
       gender: genderConfig.find((g: any) => g.selected)?.type,
     };
-    console.info("requestBody", requestBody)
+    console.info("requestBody", requestBody);
+  };
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result?.canceled) {
+      setImage(result.assets[0].uri);
+    }
   };
   return (
     <SafeAreaView style={styles.addUserScreen}>
+      {/* <CustomLoader /> */}
       {isOpen ? (
         <UserEditInfo
           isOpen={isOpen}
@@ -123,7 +141,7 @@ const AddUserScreen: React.FC = () => {
       ) : null}
       <View style={{ width, height: "38%" }}>
         <Image
-          source={require("../assets/dummy_image.jpg")}
+          source={image ? { uri: image } : require("../assets/dummy_image.jpg")}
           style={styles.displayImage}
         />
         <Image
@@ -131,10 +149,10 @@ const AddUserScreen: React.FC = () => {
           style={styles.waveImage}
           resizeMode="contain"
         />
-        <UserImageThumbnail />
+        <UserImageThumbnail pickImage={pickImage} image={image} />
       </View>
       <View style={styles.userProfileView}>
-        <NameSection name={name}/>
+        <NameSection name={name} />
         <View style={styles.horizontalLine} />
         <UserEditTile
           type="email"
@@ -169,7 +187,12 @@ const AddUserScreen: React.FC = () => {
           activeOption={activeOption}
           errorType={errorType}
         />
-        <CustomButton label="Submit" onPress={() => submitHandler()}/>
+        <CustomButton
+          label="Submit"
+          onPress={() => {
+            submitHandler();
+          }}
+        />
       </View>
     </SafeAreaView>
   );

@@ -1,12 +1,24 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from "react";
-import { TouchableOpacity, Image } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { styles } from "./styles";
+import { Image } from "expo-image";
 
-const UserImageThumbnail: React.FC = () => {
+interface Props {
+  pickImage: () => void;
+  image: any;
+}
+
+const UserImageThumbnail: React.FC<Props> = (props: Props) => {
+  const { pickImage, image } = props;
   return (
-    <TouchableOpacity style={styles.thumbnailWrapper}>
+    <TouchableOpacity
+      style={styles.thumbnailWrapper}
+      onPress={() => {
+        pickImage();
+      }}>
       <Image
-        source={require("../assets/dummy_image.jpg")}
+        source={image ? { uri: image } : require("../assets/dummy_image.jpg")}
         style={styles.thumbnail}
       />
     </TouchableOpacity>
